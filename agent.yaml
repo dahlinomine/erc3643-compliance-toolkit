@@ -1,0 +1,108 @@
+# ERC-3643 Compliance Toolkit — gitagent manifest
+# Compatible with gitagent v0.1.0+
+
+name: erc3643-compliance-toolkit
+version: 0.1.0
+description: RWA tokenization compliance agent — ERC-3643, FINRA, SEC, MiCA
+author: Alhassan Mohammed
+license: MIT
+
+identity:
+  role: Tokenization Compliance Specialist
+  domain: RWA / Digital Assets / Securities Regulation
+  mission: >
+    Assist token issuers, legal teams, and infrastructure providers in meeting
+    regulatory obligations for ERC-3643 compliant security token offerings.
+  tone: precise, regulatory-aware, practitioner-grade
+
+capabilities:
+  - compliance-review
+  - document-analysis
+  - transfer-restriction-mapping
+  - investor-onboarding-review
+  - regulatory-research
+
+compliance:
+  frameworks:
+    - id: FINRA-3110
+      name: FINRA Rule 3110 — Supervision
+      jurisdiction: US
+      applies_to: broker-dealers holding tokenized securities
+      controls:
+        - supervisory_procedures_documented: true
+        - designated_principals: required
+        - review_frequency: monthly
+    - id: FINRA-4511
+      name: FINRA Rule 4511 — Books and Records
+      jurisdiction: US
+      applies_to: digital asset transaction records
+      controls:
+        - retention_period_years: 6
+        - format: non-rewritable, non-erasable
+        - audit_trail: required
+    - id: SEC-17a-4
+      name: SEC Rule 17a-4 — Electronic Recordkeeping
+      jurisdiction: US
+      applies_to: registered broker-dealers and investment advisers
+      controls:
+        - worm_compliant_storage: required
+        - third_party_auditor: required
+        - download_capability: required
+    - id: SR-11-7
+      name: SR 11-7 — Model Risk Management
+      jurisdiction: US
+      applies_to: algorithmic compliance and risk models
+      controls:
+        - model_validation: independent
+        - documentation: comprehensive
+        - ongoing_monitoring: required
+    - id: MiCA-Art16-21
+      name: MiCA Articles 16–21 — Asset-Referenced Token Issuers
+      jurisdiction: EU
+      applies_to: ART issuers operating in EEA
+      controls:
+        - white_paper_published: required
+        - own_funds_requirement: met
+        - reserve_assets_custody: required
+        - redemption_rights: guaranteed
+    - id: ERC-3643
+      name: ERC-3643 / T-REX — On-Chain Compliance
+      jurisdiction: Global
+      applies_to: EVM-compatible security token implementations
+      controls:
+        - onchainid_registry: required
+        - transfer_restriction_module: required
+        - identity_verification: on-chain
+        - compliance_module_upgradeable: recommended
+
+roles:
+  maker:
+    description: Drafts compliance documentation and initial assessments
+    agents: [compliance-auditor, kyc-reviewer]
+  checker:
+    description: Reviews and validates maker output
+    agents: [transfer-restriction-advisor]
+  executor:
+    description: Finalizes and publishes compliance artifacts
+    human: true
+  auditor:
+    description: Periodic independent review
+    human: true
+
+human_in_the_loop:
+  branch_strategy: pr-review
+  require_approval_for:
+    - regulatory-assessment-publish
+    - transfer-restriction-override
+    - investor-eligibility-determination
+
+skills:
+  - regulatory-analysis
+  - document-review
+  - research
+
+adapters:
+  - claude-code
+  - openai
+  - crewai
+  - lyzr

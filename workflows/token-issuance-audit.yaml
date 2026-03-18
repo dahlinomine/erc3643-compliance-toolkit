@@ -1,0 +1,50 @@
+# SkillsFlow: Token Issuance Compliance Audit
+# Runs a full compliance check on a new token issuance
+
+name: token-issuance-audit
+version: 0.1.0
+description: End-to-end compliance audit for ERC-3643 token issuance
+
+inputs:
+  - token_contract_address
+  - offering_jurisdiction
+  - offering_type  # security_token | art | utility
+
+steps:
+  - id: contract-review
+    skill: regulatory-analysis
+    agent: agents/compliance-auditor.md
+    inputs:
+      contract: ${{ inputs.token_contract_address }}
+      jurisdiction: ${{ inputs.offering_jurisdiction }}
+    outputs:
+      - compliance_gaps
+      - remediation_items
+
+  - id: transfer-restriction-review
+    skill: document-review
+    agent: agents/transfer-restriction-advisor.md
+    depends_on: [contract-review]
+    inputs:
+      compliance_module: ${{ inputs.token_contract_address }}
+      gaps: ${{ steps.contract-review.outputs.compliance_gaps }}
+    outputs:
+      - restriction_table_review
+      - restriction_gaps
+
+  - id: human-review
+    type: human-in-the-loop
+    depends_on: [transfer-restriction-review]
+    inputs:
+      compliance_gaps: ${{ steps.contract-review.outputs.compliance_gaps }}
+      restriction_gaps: ${{ steps.transfer-restriction-review.outputs.restriction_gaps }}
+      remediation_items: ${{ steps.contract-review.outputs.remediation_items }}
+    approval_required: true
+    escalate_to: compliance-officer
+
+  - id: publish-report
+    skill: document-review
+    depends_on: [human-review]
+    condition: ${{ steps.human-review.approved == true }}
+    outputs:
+      - final_audit_report
